@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¿Cuál es tu rutina ideal? — Moaio Beauty</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #faf7f2;
+    --blush: #e8c4b0;
+    --rose: #c97d63;
+    --deep: #2a1f1a;
+    --muted: #7a6558;
+    --light: #f0ebe3;
+    --white: #ffffff;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--deep);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(232,196,176,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 90%, rgba(201,125,99,0.12) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* Header */
+  .brand {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .brand-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 6vw, 48px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--deep);
+    margin-top: 8px;
+  }
+  .brand-title em {
+    font-style: italic;
+    color: var(--rose);
+  }
+  .brand-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 12px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 40px;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 2px;
+    background: var(--light);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blush), var(--rose));
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Question card */
+  .question-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 2px 40px rgba(42,31,26,0.06);
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.4s ease forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--deep);
+    margin-bottom: 32px;
+  }
+
+  /* Options */
+  .options {
+    display: grid;
+    gap: 10px;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border: 1.5px solid var(--light);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--deep);
+    width: 100%;
+  }
+  .option:hover {
+    border-color: var(--blush);
+    background: rgba(232,196,176,0.1);
+    transform: translateX(4px);
+  }
+  .option.selected {
+    border-color: var(--rose);
+    background: rgba(201,125,99,0.08);
+  }
+  .option-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+  }
+  .option-text { flex: 1; line-height: 1.4; }
+  .option-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--light);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 10px;
+    color: transparent;
+  }
+  .option.selected .option-check {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: white;
+  }
+
+  /* Nav buttons */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+  }
+  .btn-back {
+    font-size: 13px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .btn-back:hover { color: var(--deep); }
+  .btn-next {
+    background: var(--rose);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 32px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .btn-next.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .btn-next.active:hover {
+    background: var(--deep);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(42,31,26,0.2);
+  }
+
+  /* Result */
+  .result-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 2px 40px rgba(42,31,26,0.06);
+    text-align: center;
+    display: none;
+    animation: fadeUp 0.5s ease forwards;
+  }
+  .result-emoji { font-size: 56px; margin-bottom: 16px; }
+  .result-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rose);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .result-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 300;
+    color: var(--deep);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .result-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 32px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .result-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+  .result-tag {
+    background: var(--light);
+    color: var(--muted);
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-weight: 400;
+  }
+  .result-cta {
+    display: inline-block;
+    background: var(--rose);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    padding: 16px 40px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    margin-bottom: 12px;
+  }
+  .result-cta:hover {
+    background: var(--deep);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(42,31,26,0.2);
+  }
+  .result-restart {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 16px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .result-restart:hover { color: var(--deep); }
+
+  /* Decorative dots */
+  .dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 32px;
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--light);
+    transition: background 0.3s;
+  }
+  .dot.active { background: var(--rose); }
+
+  @media (max-width: 480px) {
+    .question-card, .result-card { padding: 28px 20px; }
+    .wrap { padding: 32px 16px 60px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="brand-name">Moaio Beauty · K-Beauty Argentina</div>
+    <h1 class="brand-title">Descubrí tu<br><em>rutina ideal</em></h1>
+    <p class="brand-sub">4 preguntas · resultado personalizado · 100% gratis</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label">
+      <span id="prog-text">Pregunta 1 de 4</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+
+  <div id="quiz-area"></div>
+
+  <div class="dots" id="dots">
+    <div class="dot active"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    text: "¿Cómo describirías tu piel?",
+    options: [
+      { icon: "💧", text: "Seca — se siente tirante, le falta hidratación", value: "seca" },
+      { icon: "✨", text: "Mixta — grasa en la zona T, seca en las mejillas", value: "mixta" },
+      { icon: "🌟", text: "Grasa — brilla bastante durante el día", value: "grasa" },
+      { icon: "🌸", text: "Sensible — se irrita o enrojece con facilidad", value: "sensible" },
+      { icon: "🍃", text: "Normal — equilibrada, sin problemas frecuentes", value: "normal" },
+    ]
+  },
+  {
+    text: "¿Cuál es tu mayor preocupación ahora mismo?",
+    options: [
+      { icon: "🔴", text: "Acné o granitos frecuentes", value: "acne" },
+      { icon: "🌑", text: "Manchas o tono desparejo", value: "manchas" },
+      { icon: "⏳", text: "Arrugas o líneas de expresión", value: "antiage" },
+      { icon: "💦", text: "Falta de hidratación o piel apagada", value: "hidratacion" },
+      { icon: "🔍", text: "Poros abiertos o textura", value: "poros" },
+      { icon: "🌿", text: "Rosácea o enrojecimiento", value: "rosacea" },
+    ]
+  },
+  {
+    text: "¿Qué área querés trabajar principalmente?",
+    options: [
+      { icon: "✨", text: "Mi rostro — skincare completo", value: "rostro" },
+      { icon: "💇", text: "Mi cabello — brillo, hidratación o control del frizz", value: "cabello" },
+      { icon: "👁️", text: "Mis pestañas y cejas — definición y cuidado", value: "pestanas" },
+      { icon: "💄", text: "Todo — skincare, maquillaje y más", value: "todo" },
+    ]
+  },
+  {
+    text: "¿Cuánta experiencia tenés con el skincare?",
+    options: [
+      { icon: "🌱", text: "Recién empiezo — quiero algo simple y efectivo", value: "basica" },
+      { icon: "🌿", text: "Tengo una rutina básica — quiero mejorarla", value: "intermedia" },
+      { icon: "🌳", text: "Soy experta — busco productos específicos y activos", value: "avanzada" },
+    ]
+  }
+];
+
+const results = {
+  acne:       { emoji: "🌿", title: "Rutina anti-acné K-Beauty", desc: "Tu piel necesita ingredientes calmantes y reguladores del sebo. El K-Beauty tiene los mejores activos para acné: niacinamida, centella asiática y ácido salicílico en texturas suaves que no irritan.", tags: ["Parches de acné", "Tónicos exfoliantes", "Sérums de niacinamida", "Protector solar ligero"], url: "/necesidades-de-la-piel/acne/", cta: "Ver productos para acné" },
+  manchas:    { emoji: "✨", title: "Rutina para manchas y luminosidad", desc: "Las manchas responden muy bien a la vitamina C, niacinamida y los activos fermentados del K-Beauty. Con constancia, en pocas semanas notás el tono más parejo.", tags: ["Sérums vitamina C", "Tónicos iluminadores", "Protector solar SPF50+", "Esencias fermentadas"], url: "/necesidades-de-la-piel/manchas/", cta: "Ver productos para manchas" },
+  antiage:    { emoji: "⏳", title: "Rutina antiage K-Beauty", desc: "El K-Beauty prioriza la prevención antes que la corrección. Con colágeno, péptidos y retinol suave podés mantener la elasticidad y suavizar líneas de expresión visiblemente.", tags: ["Cremas de colágeno", "Sérums con péptidos", "Contorno de ojos", "Ampollas antiage"], url: "/necesidades-de-la-piel/antiage/", cta: "Ver productos antiage" },
+  hidratacion:{ emoji: "💧", title: "Rutina hidratación profunda", desc: "La hidratación es la base de todo en K-Beauty. Con ácido hialurónico, ceramidas y esencias hidratantes, tu piel va a recuperar esa luminosidad natural.", tags: ["Esencias hidratantes", "Cremas barrera", "Tónicos de ácido hialurónico", "Mascarillas nocturnas"], url: "/necesidades-de-la-piel/hidratante/", cta: "Ver productos hidratantes" },
+  poros:      { emoji: "🔍", title: "Rutina para poros y textura", desc: "Los poros abiertos y la textura irregular mejoran con exfoliación regular y productos que regulan el sebo. El K-Beauty tiene exfoliantes suaves que se usan sin irritar.", tags: ["Tónicos exfoliantes", "Mascarillas de arcilla", "Sérums con BHA", "Cremas matificantes"], url: "/necesidades-de-la-piel/poros/", cta: "Ver productos para poros" },
+  rosacea:    { emoji: "🌸", title: "Rutina para piel sensible y rosácea", desc: "La piel sensible necesita ingredientes calmantes y sin fragancia. Centella asiática, aloe y madecasósido son los héroes del K-Beauty para calmar el enrojecimiento.", tags: ["Cremas de centella", "Tónicos calmantes", "Sérums desinflamantes", "Protector mineral"], url: "/necesidades-de-la-piel/rosacea/", cta: "Ver productos para rosácea" },
+  cabello:    { emoji: "💇", title: "Rutina capilar K-Beauty", desc: "El cabello sano empieza en el cuero cabelludo. Los tratamientos capilares coreanos son famosos por su tecnología de reparación profunda y control del frizz sin pesar el pelo.", tags: ["Sérums capilares", "Tratamientos reparadores", "Mascarillas capilares", "Anti frizz"], url: "/cabello/", cta: "Ver productos capilares" },
+  pestanas:   { emoji: "👁️", title: "Rutina para pestañas y cejas", desc: "Unas pestañas definidas y cejas cuidadas transforman la mirada sin necesidad de maquillaje. K-Beauty tiene accesorios y tratamientos específicos para esta área.", tags: ["Kits de pestañas", "Serums de cejas", "Máscaras de pestañas", "Accesorios"], url: "/pestanas-cejas/", cta: "Ver productos para pestañas y cejas" },
+  todo:       { emoji: "🌸", title: "Rutina completa K-Beauty", desc: "¡Bienvenida al mundo del K-Beauty! Tenemos todo lo que necesitás para armar tu rutina de skincare, maquillaje y cuidado personal con productos 100% originales de Corea.", tags: ["Skincare completo", "Maquillaje K-Beauty", "Accesorios", "Marcas originales"], url: "/productos/", cta: "Explorar toda la tienda" },
+};
+
+let current = 0;
+let answers = [];
+
+function getResult() {
+  const area = answers[2];
+  if (area === 'cabello') return results.cabello;
+  if (area === 'pestanas') return results.pestanas;
+  if (area === 'todo') return results.todo;
+  const concern = answers[1];
+  return results[concern] || results.hidratacion;
+}
+
+function updateProgress() {
+  const pct = Math.round((current / questions.length) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-text').textContent = current < questions.length
+    ? `Pregunta ${current + 1} de ${questions.length}`
+    : 'Resultado listo';
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === current || i < current);
+  });
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  const area = document.getElementById('quiz-area');
+  area.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'question-card';
+  card.innerHTML = `
+    <div class="q-number">Pregunta ${current + 1}</div>
+    <div class="q-text">${q.text}</div>
+    <div class="options" id="options"></div>
+    <div class="nav">
+      <button class="btn-back" id="btn-back" onclick="goBack()">${current > 0 ? '← Anterior' : ''}</button>
+      <button class="btn-next" id="btn-next" onclick="goNext()">${current < questions.length - 1 ? 'Siguiente →' : 'Ver mi rutina ✨'}</button>
+    </div>
+  `;
+  area.appendChild(card);
+
+  const opts = document.getElementById('options');
+  q.options.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option' + (answers[current] === o.value ? ' selected' : '');
+    btn.innerHTML = `<span class="option-icon">${o.icon}</span><span class="option-text">${o.text}</span><span class="option-check">✓</span>`;
+    btn.onclick = () => selectOption(o.value, btn);
+    opts.appendChild(btn);
+  });
+
+  if (answers[current]) document.getElementById('btn-next').classList.add('active');
+  updateProgress();
+}
+
+function selectOption(value, btn) {
+  answers[current] = value;
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('btn-next').classList.add('active');
+}
+
+function goNext() {
+  if (!answers[current]) return;
+  current++;
+  if (current >= questions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function goBack() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+function showResult() {
+  const r = getResult();
+  const area = document.getElementById('quiz-area');
+  document.getElementById('dots').style.display = 'none';
+  document.getElementById('prog-text').textContent = '¡Listo!';
+  document.getElementById('prog-fill').style.width = '100%';
+  document.getElementById('prog-pct').textContent = '100%';
+  area.innerHTML = `
+    <div class="result-card" style="display:block">
+      <div class="result-emoji">${r.emoji}</div>
+      <div class="result-label">Tu rutina ideal</div>
+      <h2 class="result-title">${r.title}</h2>
+      <p class="result-desc">${r.desc}</p>
+      <div class="result-tags">${r.tags.map(t => `<span class="result-tag">${t}</span>`).join('')}</div>
+      <a href="${r.url}" class="result-cta">${r.cta}</a>
+      <button class="result-restart" onclick="restart()">Volver a empezar</button>
+    </div>
+  `;
+}
+
+function restart() {
+  current = 0;
+  answers = [];
+  document.getElementById('dots').style.display = 'flex';
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
